@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		928617E72D79B7410059A85C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928617E62D79B7410059A85C /* MapKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		928617CD2D798A0B0059A85C /* ToDoList App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToDoList App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		928617E62D79B7410059A85C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				928617E72D79B7410059A85C /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +39,7 @@
 			isa = PBXGroup;
 			children = (
 				928617CF2D798A0B0059A85C /* ToDoList App */,
+				928617E52D79B7400059A85C /* Frameworks */,
 				928617CE2D798A0B0059A85C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +50,14 @@
 				928617CD2D798A0B0059A85C /* ToDoList App.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		928617E52D79B7400059A85C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				928617E62D79B7410059A85C /* MapKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

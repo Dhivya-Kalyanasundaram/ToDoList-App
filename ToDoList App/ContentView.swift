@@ -10,13 +10,28 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-
+    @State private var selectedPriority: Priority = .low
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Item>
 
     var body: some View {
+        Text("Task Manager").font(.title)
+        Spacer()
+        Section() {
+//                   Text("Priority: \(selectedPriority.rawValue)")
+//                       .font(.title)
+//                       .padding()
+
+               Picker("Select Priority", selection: $selectedPriority) {
+                   ForEach(Priority.allCases, id: \.self) { priority in
+                       Text(priority.rawValue).tag(priority)
+                   }
+               }
+               .pickerStyle(SegmentedPickerStyle())
+               .padding()
+           }
         NavigationView {
             List {
                 ForEach(items) { item in
