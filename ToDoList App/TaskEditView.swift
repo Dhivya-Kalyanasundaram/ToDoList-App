@@ -22,6 +22,9 @@ struct TaskEditView: View {
     @State private var showingMap = false
     @State private var selectedCoordinate: IdentifiableCoordinate?
     
+    @State private var selectedDate = Date()
+    @State private var showDatePicker = false
+    
     init(passedTask: Item? = nil, initialDate: Date) {
         if let selectedTask = passedTask {
             _selectedTask = State(initialValue: selectedTask)
@@ -46,11 +49,13 @@ struct TaskEditView: View {
             }
             
             Section(header: Text("Task Due")) {
-                Toggle("Schedule Time", isOn: $scheduleTime)
+                // Toggle("Schedule Time", isOn: $scheduleTime)
+                DatePicker("Schedule Time", selection: $selectedDate, displayedComponents: .date)
+                    .datePickerStyle(CompactDatePickerStyle())
                 //                DatePicker("Due Date", selection: $dueDate, displayedComponents: displayComponents())
             }
             
-            Section(header: Text("Task Due")){
+            Section(header: Text("Priority")){
                 
                 Picker("Select Priority", selection: $selectedPriority) {
                     ForEach(Priority.allCases, id: \.self) { priority in
@@ -70,26 +75,46 @@ struct TaskEditView: View {
                 .pickerStyle(MenuPickerStyle())
             }
             
-            Section(header: Text("Category")) {
-                       TextField("Enter location", text: $location)
-                           .textFieldStyle(RoundedBorderTextFieldStyle())
-                           .padding()
-
-                       Button(action: {
-                           showingMap = true
-                       }) {
-                           Text("Select from Map")
-                               .padding()
-                               .background(Color.blue)
-                               .foregroundColor(.white)
-                               .cornerRadius(8)
-                       }
-                       .sheet(isPresented: $showingMap) {
-                           MapView(selectedCoordinate: $selectedCoordinate, location: $location)
-                       }
-                   }
-                   .padding()
+            Section(header: Text("Location")) {
+                HStack{
+                    
+                    TextField("Enter location", text: $location)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .multilineTextAlignment(.center)
+                    // .padding()
+                    Spacer()
+                    Button(action: {
+                        showingMap = true
+                    }) {
+                        Text("Select from Map")
+                            .padding(10)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                    .sheet(isPresented: $showingMap) {
+                        MapView(selectedCoordinate: $selectedCoordinate, location: $location)
+                    }
+                }
+            }
+//            
+//            
+//            Button("Save", action: {
+//                print("button presses")
+//            })
+            
         }
+        Spacer()
+        Button("Save", action: {
+            print("button presses")
+        }).padding()
+            .background(Color.blue)
+            .foregroundColor(Color.white)
+            .frame(height: 60)
+            .cornerRadius(15)
+        
+        
+       
     }
     func displayComponents() {
         
@@ -99,6 +124,13 @@ struct TaskEditView: View {
         
     }
     
+    
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter
+    }
+    
 }
 
 enum Priority: String, CaseIterable {
@@ -106,6 +138,7 @@ enum Priority: String, CaseIterable {
     case medium = "Medium"
     case high = "High"
 }
+
 enum Category : String, CaseIterable {
     case personal = "Personal"
     case office = "Office"
@@ -121,12 +154,12 @@ struct MapView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var selectedCoordinate: IdentifiableCoordinate?
     @Binding var location: String
-
+    
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
         span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
     )
-
+    
     var body: some View {
         VStack {
             Map(coordinateRegion: $region, interactionModes: .all, showsUserLocation: true, annotationItems: [selectedCoordinate].compactMap { $0 }) { item in
@@ -143,7 +176,7 @@ struct MapView: View {
             }
         }
     }
-
+    
     func getLocationName(from coordinate: CLLocationCoordinate2D, completion: @escaping (String?) -> Void) {
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
